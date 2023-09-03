@@ -13,7 +13,7 @@ static const int failonclear = 1;
 static const int squaresize = 50;
 
 /* time in seconds to cancel lock with mouse movement */
-static const int timetocancel = 10;
+static int timetocancel = 10;
 
 /* time in seconds before the monitor shuts down */
 static const int monitortime = 5;

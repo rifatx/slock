@@ -357,7 +357,9 @@ lockscreen(Display *dpy, struct xrandr *rr, int screen)
 static void
 usage(void)
 {
-	die("usage: slock [-v] [cmd [arg ...]]\n");
+	die("usage: slock [-v] [-t N] [cmd [arg ...]]\n"
+      "  v: Print version information and exit\n"
+      "  t: Allow N seconds of grace period before actually locking\n");
 }
 
 int
@@ -368,7 +370,7 @@ main(int argc, char **argv) {
 	struct group *grp;
 	uid_t duid;
 	gid_t dgid;
-	const char *hash;
+	const char *hash, *argt;
 	Display *dpy;
 	int s, nlocks, nscreens;
 	CARD16 standby, suspend, off;
@@ -377,6 +379,13 @@ main(int argc, char **argv) {
 	case 'v':
 		fprintf(stderr, "slock-"VERSION"\n");
 		return 0;
+  case 't':
+    argt = argv[1];
+    if (!argt || argt[0] < '0' || argt[0] > '9') {
+      usage();
+    }
+    timetocancel = atoi(argt);
+    break;
 	default:
 		usage();
 	} ARGEND
