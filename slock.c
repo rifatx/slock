@@ -4,6 +4,7 @@
 #include <shadow.h>
 #endif
 
+#include <stdbool.h>
 #include <ctype.h>
 #include <errno.h>
 #include <grp.h>
@@ -362,6 +363,13 @@ usage(void)
       "  t: Allow N seconds of grace period before actually locking\n");
 }
 
+static bool
+isnumber(const char*s) {
+     char* e = NULL;
+        (void) strtol(s, &e, 0);
+           return e != NULL && *e == (char)0;
+}
+
 int
 main(int argc, char **argv) {
 	struct xrandr rr;
@@ -381,10 +389,11 @@ main(int argc, char **argv) {
 		return 0;
   case 't':
     argt = argv[1];
-    if (!argt || argt[0] < '0' || argt[0] > '9') {
+    if (!argt || !isnumber(argt)) {
       usage();
     }
     timetocancel = atoi(argt);
+    ++argv;
     break;
 	default:
 		usage();
